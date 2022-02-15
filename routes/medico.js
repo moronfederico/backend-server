@@ -11,7 +11,7 @@ var mdAutenticacion = require('../middlewares/autenticacion');
 
 
 var Medico = require('../models/medico');
-const medico = require('../models/medico');
+
 
 
 
@@ -71,8 +71,9 @@ app.put('/:id', mdAutenticacion.verificaToken, (req, res) => {
         }
 
         medico.nombre = body.nombre;
-        medico.email = body.email;
-        medico.role = body.role;
+        medico.usuario = req.usuario._id;
+        medico.hospital = body.hospital;
+
 
         medico.save((err, medicoGuardado) => {
             if (err) {
@@ -84,7 +85,6 @@ app.put('/:id', mdAutenticacion.verificaToken, (req, res) => {
 
             }
 
-            medicoGuardado.password = ':)';
 
 
             res.status(200).json({
@@ -111,10 +111,9 @@ app.post('/', mdAutenticacion.verificaToken, (req, res) => {
 
     var medico = new Medico({
         nombre: body.nombre,
-        email: body.email,
-        password: bcrypt.hashSync(body.password, 10),
-        img: body.img,
-        role: body.role
+        usuario: req.usuario._id,
+        hospital: body.hospital
+
     });
     medico.save((err, medicoGuardado) => {
 
@@ -129,7 +128,7 @@ app.post('/', mdAutenticacion.verificaToken, (req, res) => {
         res.status(201).json({
             ok: true,
             medico: medicoGuardado,
-            medicotoken: req.medico
+
         });
 
     });
