@@ -52,8 +52,6 @@ app.put('/:id', mdAutenticacion.verificaToken, (req, res) => {
 
     Usuario.findById(id, (err, usuario) => {
 
-
-
         if (err) {
             return res.status(500).json({
                 ok: false,
